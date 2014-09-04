@@ -3,7 +3,9 @@ using System.Runtime.InteropServices;
 using SFML;
 using SFML.Window;
 using SFML.System;
-using Tao.OpenGl;
+using SFML.Graphics;
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
 
 namespace window
 {
@@ -14,6 +16,9 @@ namespace window
         /// </summary>
         static void Main()
         {
+            //start OpenTK
+            OpenTK.Toolkit.Init();
+
             // Request a 32-bits depth buffer when creating the window
             ContextSettings contextSettings = new ContextSettings();
             contextSettings.DepthBits = 32;
@@ -22,7 +27,8 @@ namespace window
             Window window = new Window(new VideoMode(640, 480), "SFML window with OpenGL", Styles.Default, contextSettings);
 
             // Make it the active window for OpenGL calls
-            window.SetActive();
+            window.SetActive(true);
+            OpenTK.Graphics.GraphicsContext context = new OpenTK.Graphics.GraphicsContext(new ContextHandle(IntPtr.Zero), null);
 
             // Setup event handlers
             window.Closed     += new EventHandler(OnClosed);
@@ -30,25 +36,25 @@ namespace window
             window.Resized    += new EventHandler<SizeEventArgs>(OnResized);
 
             // Set the color and depth clear values
-            Gl.glClearDepth(1);
-            Gl.glClearColor(0, 0, 0, 1);
+            GL.ClearDepth(1);
+            GL.ClearColor(0, 0, 0, 1);
 
             // Enable Z-buffer read and write
-            Gl.glEnable(Gl.GL_DEPTH_TEST);
-            Gl.glDepthMask(Gl.GL_TRUE);
+            GL.Enable(EnableCap.DepthTest);
+            GL.DepthMask(true);
 
             // Disable lighting and texturing
-            Gl.glDisable(Gl.GL_LIGHTING);
-            Gl.glDisable(Gl.GL_TEXTURE_2D);
+            GL.Disable(EnableCap.Lighting);
+            GL.Disable(EnableCap.Texture2D);
 
             // Configure the viewport (the same size as the window)
-            Gl.glViewport(0, 0, (int)window.Size.X, (int)window.Size.Y);
+            GL.Viewport(0, 0, (int)window.Size.X, (int)window.Size.Y);
 
             // Setup a perspective projection
-            Gl.glMatrixMode(Gl.GL_PROJECTION);
-            Gl.glLoadIdentity();
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadIdentity();
             float ratio = (float)(window.Size.X) / window.Size.Y;
-            Gl.glFrustum(-ratio, ratio, -1, 1, 1, 500);
+            GL.Frustum(-ratio, ratio, -1, 1, 1, 500);
 
             // Define a 3D cube (6 faces made of 2 triangles composed by 3 vertices)
             float[] cube = new float[]
@@ -98,14 +104,14 @@ namespace window
             };
 
             // Enable position and color vertex components
-            Gl.glEnableClientState(Gl.GL_VERTEX_ARRAY);
-            Gl.glEnableClientState(Gl.GL_COLOR_ARRAY);
-            Gl.glVertexPointer(3, Gl.GL_FLOAT, 7 * sizeof(float), Marshal.UnsafeAddrOfPinnedArrayElement(cube, 0));
-            Gl.glColorPointer(4, Gl.GL_FLOAT, 7 * sizeof(float), Marshal.UnsafeAddrOfPinnedArrayElement(cube, 3));
+            GL.EnableClientState(ArrayCap.VertexArray);
+            GL.EnableClientState(ArrayCap.ColorArray);
+            GL.VertexPointer(3, VertexPointerType.Float, 7 * sizeof(float), Marshal.UnsafeAddrOfPinnedArrayElement(cube, 0));
+            GL.ColorPointer(4, ColorPointerType.Float, 7 * sizeof(float), Marshal.UnsafeAddrOfPinnedArrayElement(cube, 3));
 
             // Disable normal and texture coordinates vertex components
-            Gl.glDisableClientState(Gl.GL_NORMAL_ARRAY);
-            Gl.glDisableClientState(Gl.GL_TEXTURE_COORD_ARRAY);
+            GL.DisableClientState(ArrayCap.NormalArray);
+            GL.DisableClientState(ArrayCap.TextureCoordArray);
 
             Clock clock = new Clock();
 
@@ -116,18 +122,18 @@ namespace window
                 window.DispatchEvents();
 
                 // Clear color and depth buffer
-                Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
                 // Apply some transformations
-                Gl.glMatrixMode(Gl.GL_MODELVIEW);
-                Gl.glLoadIdentity();
-                Gl.glTranslatef(0.0F, 0.0F, -200.0F);
-                Gl.glRotatef(clock.ElapsedTime.AsSeconds() * 50, 1.0F, 0.0F, 0.0F);
-                Gl.glRotatef(clock.ElapsedTime.AsSeconds() * 30, 0.0F, 1.0F, 0.0F);
-                Gl.glRotatef(clock.ElapsedTime.AsSeconds() * 90, 0.0F, 0.0F, 1.0F);
+                GL.MatrixMode(MatrixMode.Modelview);
+                GL.LoadIdentity();
+                GL.Translate(0.0F, 0.0F, -200.0F);
+                GL.Rotate(clock.ElapsedTime.AsSeconds() * 50, 1.0F, 0.0F, 0.0F);
+                GL.Rotate(clock.ElapsedTime.AsSeconds() * 30, 0.0F, 1.0F, 0.0F);
+                GL.Rotate(clock.ElapsedTime.AsSeconds() * 90, 0.0F, 0.0F, 1.0F);
 
                 // Draw the cube
-                Gl.glDrawArrays(Gl.GL_TRIANGLES, 0, 36);
+                GL.DrawArrays(BeginMode.Triangles, 0, 36);
 
                 // Finally, display the rendered frame on screen
                 window.Display();
@@ -158,7 +164,7 @@ namespace window
         /// </summary>
         static void OnResized(object sender, SizeEventArgs e)
         {
-            Gl.glViewport(0, 0, (int)e.Width, (int)e.Height);
+            GL.Viewport(0, 0, (int)e.Width, (int)e.Height);
         }
     }
 }
