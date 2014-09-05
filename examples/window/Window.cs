@@ -3,7 +3,6 @@ using System.Runtime.InteropServices;
 using SFML;
 using SFML.Window;
 using SFML.System;
-using SFML.Graphics;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
@@ -16,8 +15,6 @@ namespace window
         /// </summary>
         static void Main()
         {
-            //start OpenTK
-            OpenTK.Toolkit.Init();
 
             // Request a 32-bits depth buffer when creating the window
             ContextSettings contextSettings = new ContextSettings();
@@ -28,6 +25,9 @@ namespace window
 
             // Make it the active window for OpenGL calls
             window.SetActive(true);
+
+            //start OpenTK
+            OpenTK.Toolkit.Init();
             OpenTK.Graphics.GraphicsContext context = new OpenTK.Graphics.GraphicsContext(new ContextHandle(IntPtr.Zero), null);
 
             // Setup event handlers

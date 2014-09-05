@@ -6,6 +6,8 @@ using SFML.Window;
 using SFML.System;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using Tao.OpenGl;
+
 namespace opengl
 {
     static class Program
@@ -15,9 +17,7 @@ namespace opengl
         /// </summary>
         static void Main()
         {
-            //start OpenTK
-            OpenTK.Toolkit.Init();
-
+            
             // Request a 32-bits depth buffer when creating the window
             ContextSettings contextSettings = new ContextSettings();
             contextSettings.DepthBits = 32;
@@ -28,6 +28,9 @@ namespace opengl
 
             // Make it the active window for OpenGL calls
             window.SetActive(true);
+            
+            //start OpenTK
+            OpenTK.Toolkit.Init();
             OpenTK.Graphics.GraphicsContext context = new OpenTK.Graphics.GraphicsContext(new ContextHandle(IntPtr.Zero), null);
 
             // Setup event handlers
@@ -51,7 +54,7 @@ namespace opengl
             {
                 GL.GenTextures(1, out texture);
                 GL.BindTexture(TextureTarget.Texture2D, texture);
-                GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+                Glu.gluBuild2DMipmaps(Gl.GL_TEXTURE_2D, Gl.GL_RGBA, (int)image.Size.X, (int)image.Size.Y, Gl.GL_RGBA, Gl.GL_UNSIGNED_BYTE, image.Pixels);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             }
