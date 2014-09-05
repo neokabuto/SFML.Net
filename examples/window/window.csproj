@@ -49,10 +49,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Graphics\sfml-graphics.csproj">
-      <Project>{46786269-57b9-48e7-aa4f-8f4d84609fe6}</Project>
-      <Name>sfml-graphics</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\src\System\sfml-system.csproj">
       <Project>{31D24303-F6A9-4D53-BB03-A73EDCB3186D}</Project>
       <Name>sfml-system</Name>
