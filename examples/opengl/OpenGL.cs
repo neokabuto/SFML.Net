@@ -25,7 +25,7 @@ namespace opengl
             window.SetVerticalSyncEnabled(true);
 
             // Make it the active window for OpenGL calls
-            window.SetActive(true);
+            window.SetActive();
             
             // Initialize OpenTK
             OpenTK.Toolkit.Init();

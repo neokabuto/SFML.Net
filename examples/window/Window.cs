@@ -23,7 +23,7 @@ namespace window
             Window window = new Window(new VideoMode(640, 480), "SFML window with OpenGL", Styles.Default, contextSettings);
 
             // Make it the active window for OpenGL calls
-            window.SetActive(true);
+            window.SetActive();
 
             // Initialize OpenTK
             OpenTK.Toolkit.Init();
