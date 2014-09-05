@@ -4,8 +4,8 @@ using SFML;
 using SFML.Graphics;
 using SFML.Window;
 using SFML.System;
-using OpenTK;
 using OpenTK.Graphics.OpenGL;
+
 namespace opengl
 {
     static class Program
@@ -15,9 +15,7 @@ namespace opengl
         /// </summary>
         static void Main()
         {
-            //start OpenTK
-            OpenTK.Toolkit.Init();
-
+            
             // Request a 32-bits depth buffer when creating the window
             ContextSettings contextSettings = new ContextSettings();
             contextSettings.DepthBits = 32;
@@ -27,8 +25,11 @@ namespace opengl
             window.SetVerticalSyncEnabled(true);
 
             // Make it the active window for OpenGL calls
-            window.SetActive(true);
-            OpenTK.Graphics.GraphicsContext context = new OpenTK.Graphics.GraphicsContext(new ContextHandle(IntPtr.Zero), null);
+            window.SetActive();
+            
+            // Initialize OpenTK
+            OpenTK.Toolkit.Init();
+            OpenTK.Graphics.GraphicsContext context = new OpenTK.Graphics.GraphicsContext(new OpenTK.ContextHandle(IntPtr.Zero), null);
 
             // Setup event handlers
             window.Closed     += new EventHandler(OnClosed);
@@ -51,8 +52,7 @@ namespace opengl
             {
                 GL.GenTextures(1, out texture);
                 GL.BindTexture(TextureTarget.Texture2D, texture);
-                GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-                //Glu.gluBuild2DMipmaps(GL._TEXTURE_2D, GL._RGBA, (int)image.Size.X, (int)image.Size.Y, GL._RGBA, GL._UNSIGNED_BYTE, image.Pixels);
+                OpenTK.Graphics.Glu.Build2DMipmap(OpenTK.Graphics.TextureTarget.Texture2D, (int)PixelInternalFormat.Rgba, (int)image.Size.X, (int)image.Size.Y, OpenTK.Graphics.PixelFormat.Rgba, OpenTK.Graphics.PixelType.UnsignedByte, image.Pixels);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             }
