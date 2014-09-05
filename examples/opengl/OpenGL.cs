@@ -52,7 +52,6 @@ namespace opengl
                 GL.GenTextures(1, out texture);
                 GL.BindTexture(TextureTarget.Texture2D, texture);
                 GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-                //Glu.gluBuild2DMipmaps(GL._TEXTURE_2D, GL._RGBA, (int)image.Size.X, (int)image.Size.Y, GL._RGBA, GL._UNSIGNED_BYTE, image.Pixels);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             }
