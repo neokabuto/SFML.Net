@@ -26,7 +26,7 @@ namespace window
             // Make it the active window for OpenGL calls
             window.SetActive(true);
 
-            //start OpenTK
+            // Initialize OpenTK
             OpenTK.Toolkit.Init();
             OpenTK.Graphics.GraphicsContext context = new OpenTK.Graphics.GraphicsContext(new ContextHandle(IntPtr.Zero), null);
 

@@ -4,9 +4,7 @@ using SFML;
 using SFML.Graphics;
 using SFML.Window;
 using SFML.System;
-using OpenTK;
 using OpenTK.Graphics.OpenGL;
-using Tao.OpenGl;
 
 namespace opengl
 {
@@ -29,9 +27,9 @@ namespace opengl
             // Make it the active window for OpenGL calls
             window.SetActive(true);
             
-            //start OpenTK
+            // Initialize OpenTK
             OpenTK.Toolkit.Init();
-            OpenTK.Graphics.GraphicsContext context = new OpenTK.Graphics.GraphicsContext(new ContextHandle(IntPtr.Zero), null);
+            OpenTK.Graphics.GraphicsContext context = new OpenTK.Graphics.GraphicsContext(new OpenTK.ContextHandle(IntPtr.Zero), null);
 
             // Setup event handlers
             window.Closed     += new EventHandler(OnClosed);
@@ -54,7 +52,7 @@ namespace opengl
             {
                 GL.GenTextures(1, out texture);
                 GL.BindTexture(TextureTarget.Texture2D, texture);
-                Glu.gluBuild2DMipmaps(Gl.GL_TEXTURE_2D, Gl.GL_RGBA, (int)image.Size.X, (int)image.Size.Y, Gl.GL_RGBA, Gl.GL_UNSIGNED_BYTE, image.Pixels);
+                OpenTK.Graphics.Glu.Build2DMipmap(OpenTK.Graphics.TextureTarget.Texture2D, (int)PixelInternalFormat.Rgba, (int)image.Size.X, (int)image.Size.Y, OpenTK.Graphics.PixelFormat.Rgba, OpenTK.Graphics.PixelType.UnsignedByte, image.Pixels);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
             }
