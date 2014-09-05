@@ -3,7 +3,6 @@ using System.Runtime.InteropServices;
 using SFML;
 using SFML.Window;
 using SFML.System;
-using OpenTK;
 using OpenTK.Graphics.OpenGL;
 
 namespace window
@@ -28,7 +27,7 @@ namespace window
 
             // Initialize OpenTK
             OpenTK.Toolkit.Init();
-            OpenTK.Graphics.GraphicsContext context = new OpenTK.Graphics.GraphicsContext(new ContextHandle(IntPtr.Zero), null);
+            OpenTK.Graphics.GraphicsContext context = new OpenTK.Graphics.GraphicsContext(new OpenTK.ContextHandle(IntPtr.Zero), null);
 
             // Setup event handlers
             window.Closed     += new EventHandler(OnClosed);
