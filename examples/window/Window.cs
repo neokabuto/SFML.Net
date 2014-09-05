@@ -14,7 +14,6 @@ namespace window
         /// </summary>
         static void Main()
         {
-
             // Request a 32-bits depth buffer when creating the window
             ContextSettings contextSettings = new ContextSettings();
             contextSettings.DepthBits = 32;
